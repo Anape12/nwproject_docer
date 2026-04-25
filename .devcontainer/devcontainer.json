@@ -1,0 +1,30 @@
+{
+    "name": "Java Servlet Environment",
+    "image": "mcr.microsoft.com/devcontainers/java:21",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                // 保存時に自動整形を有効化
+                "editor.formatOnSave": true,
+                // ファイルごとのデフォルトフォーマッタ指定
+                "editor.defaultFormatter": "esbenp.prettier-vscode", 
+                "[java]": {
+                    "editor.defaultFormatter": "redhat.java"
+                },
+                "[xml]": {
+                    "editor.defaultFormatter": "redhat.vscode-xml"
+                }
+            },
+            "extensions": [
+                "vscjava.vscode-java-pack",
+                "adashen.vscode-tomcat",
+                "redhat.vscode-xml",      // <--- これを必ず追加
+                "esbenp.prettier-vscode"   // <--- Prettierも忘れずに追加
+            ]
+        }
+    },
+    "forwardPorts": [8080]
+}
