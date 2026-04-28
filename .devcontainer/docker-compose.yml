@@ -1,58 +1,74 @@
 volumes:
-  postgres-data:
+  mysql-data:
 
 services:
-  app:
-    container_name: javadev
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in db container
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-        POSTGRES_DB: postgres
-        POSTGRES_HOSTNAME: db
-
-    volumes:
-      - ../..:/workspaces:cached
-      
-    # Overrides default command so things don't shut down after the process ends.
-    command: sleep infinity
-
-    # Use proper Docker networking instead of network_mode: service:db
-    # to ensure reliable DNS resolution in all environments
+  tomcat:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.tomcat
+    container_name: my-tomcat
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - "8080:8080"
     networks:
       - app-network
+    environment: # ← ★これ追加
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+  app:
+    container_name: javadev
+    build:
+      context: .
+      dockerfile: Dockerfile
 
-    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    environment: # ← ✔ appの中に入れる
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+    volumes:
+      - .:/workspaces:cached
+
+    command: sleep infinity
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    networks:
+      - app-network
 
   db:
-    container_name: postgresdb
-    image: postgres:latest
+    container_name: mysqldb
+    image: mysql:8.0
     restart: unless-stopped
-    networks:
-      - app-network
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: nwproject_db
+
+    ports:
+      - "3306:3306"
+
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 30s
-    volumes:
-      - postgres-data:/var/lib/postgresql
-    environment:
-      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in app container
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
 
-    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
-    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    networks:
+      - app-network
 
 networks:
   app-network:
