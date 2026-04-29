@@ -12,12 +12,6 @@ import java.util.Map;
 
 public class DBBase {
 
-	// private final String URL =
-	// "jdbc:mysql://localhost:3306/nwproject_db?serverTimezone=JST";
-	// private final String URL =
-	// "jdbc:mysql://mysql-dev:3306/nwproject_db?serverTimezone=Asia/Tokyo&allowPublicKeyRetrieval=true&useSSL=false";
-	// private final String URL =
-	// "jdbc:mysql://db:3306/nwproject_db?serverTimezone=Asia/Tokyo&allowPublicKeyRetrieval=true&useSSL=false";
 	String host = System.getenv("DB_HOST");
 	String db = System.getenv("DB_NAME");
 	String URL = "jdbc:mysql://" + host + ":3306/" + db

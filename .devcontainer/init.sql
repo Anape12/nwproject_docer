@@ -8,5 +8,5 @@ CREATE TABLE users_info (
 );
 
 INSERT INTO users_info (name, password, birthday, permission, delete_flg)
-VALUES ('a0001', 'k1226', '1993-12-26', '1', '0');
-VALUES ('a0002', 'm0526', '1956-05-26', '2', '0');
+VALUES ('a0001', 'k1226', '1993-12-26', '1', '0'),
+       ('a0002', 'm0526', '1956-05-26', '2', '0');
