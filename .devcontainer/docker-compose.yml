@@ -15,27 +15,17 @@ services:
       - "5005:5005"
     networks:
       - app-network
-    environment: # ← ★これ追加
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+    environment:
       JPDA_ADDRESS: "*:5005"
       JPDA_TRANSPORT: dt_socket
     command: ["catalina.sh", "jpda", "run"]
+    env_file:
+      - ../.env
   app:
     container_name: javadev
     build:
       context: .
       dockerfile: Dockerfile
-
-    environment: # ← ✔ appの中に入れる
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
 
     volumes:
       - ..:/workspaces:cached
@@ -48,6 +38,9 @@ services:
 
     networks:
       - app-network
+
+    env_file:
+      - ../.env
 
   db:
     container_name: mysqldb
