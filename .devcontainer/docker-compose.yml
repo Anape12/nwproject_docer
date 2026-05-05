@@ -12,6 +12,7 @@ services:
         condition: service_healthy
     ports:
       - "8080:8080"
+      - "5005:5005"
     networks:
       - app-network
     environment: # ← ★これ追加
@@ -20,6 +21,9 @@ services:
       DB_NAME: ${DB_NAME}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      JPDA_ADDRESS: "*:5005"
+      JPDA_TRANSPORT: dt_socket
+    command: ["catalina.sh", "jpda", "run"]
   app:
     container_name: javadev
     build:
@@ -34,7 +38,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
 
     volumes:
-      - .:/workspaces:cached
+      - ..:/workspaces:cached
 
     command: sleep infinity
 
@@ -55,7 +59,7 @@ services:
       MYSQL_DATABASE: nwproject_db
 
     ports:
-      - "3306:3306"
+      - "3307:3306"
 
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
