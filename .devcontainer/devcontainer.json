@@ -8,7 +8,7 @@
 
   "shutdownAction": "stopCompose",
 
-  "postCreateCommand": "mvn clean compile package",
+  "postCreateCommand": "./mvnw clean compile package",
 
   "initializeCommand": "node .devcontainer/init-env.js",
 
