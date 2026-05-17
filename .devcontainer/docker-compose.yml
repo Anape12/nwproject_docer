@@ -9,8 +9,8 @@ services:
     container_name: my-tomcat
 
     volumes:
-      - ../target/app.war:/usr/local/tomcat/webapps/ROOT.war
-    #   - ..:/workspaces:cached
+      # - ../target/app.war:/usr/local/tomcat/webapps/ROOT.war
+      - ../target/app:/usr/local/tomcat/webapps/ROOT
 
     depends_on:
       db:
