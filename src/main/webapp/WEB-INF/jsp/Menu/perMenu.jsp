@@ -15,21 +15,20 @@ String userId = loginUser.getName();
 <body>
 <body style="background:#63515f;">
 	<div style="width:200px margin-top:30px;"></div>
-	<div style="text-align:center; background:#d3adf0; width:400px; margin-left:450px">
+	<div style="text-align:center; background:#d3adf0; width:400px; margin:0 auto;">
 		<div style="text-align:center; width:400px;">
 		<p>ようこそ<%=userId %>さん</p>
 		</div>
 		<div style="margin-top:50px; padding-top:10px;"></div>
+		<form action="${pageContext.request.contextPath}/ThreadController" target="_blank"  method="get">
+			<p><button class="search-btn4" type="submit">スレッド</button></p>
+		</form>
 		<form action="${pageContext.request.contextPath}/WorkManagement" target="_blank"  method="get">
 			<p><button class="search-btn4" type="submit">勤怠表入力</button></p>
 		</form>
 		<form action="${pageContext.request.contextPath}/OpenCalender" target="_blank"  method="get">
 			<p><button class="search-btn4" type="submit">スケジュール表</button></p>
 		</form>
-<!-- 		<form action="${pageContext.request.contextPath}/OpenShedule" target="_blank"  method="get">
-			<p><button class="search-btn3" type="submit">スケジュール表</button></p>
-		</form>
- -->
  		<form action="${pageContext.request.contextPath}/UserInsert" target="_blank"  method="get">
 			<p><button class="search-btn4" type="submit">新規ユーザー登録</button></p>
 		</form>
